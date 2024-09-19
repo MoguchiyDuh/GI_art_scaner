@@ -1,0 +1,33 @@
+{
+    "format": "GOOD",
+    "version": 1,
+    "artifacts": [
+        {
+            "setKey": "WanderersTroupe",
+            "slotKey": "goblet",
+            "level": "20",
+            "rarity": 5,
+            "mainStatKey": "atk_",
+            "location": "",
+            "lock": false,
+            "substats": [
+                {
+                    "key": "hp",
+                    "value": 269.0
+                },
+                {
+                    "key": "critDMG_",
+                    "value": 21.8
+                },
+                {
+                    "key": "atk",
+                    "value": 29.0
+                },
+                {
+                    "key": "critRate_",
+                    "value": 10.5
+                }
+            ]
+        }
+    ]
+}
