@@ -35,24 +35,7 @@
         "VermillionHereafter",
         "ViridescentVenerer",
         "VourukashasGlow",
-        "WanderersTroupe",
-        "Berserker",
-        "BraveHeart",
-        "DefendersWill",
-        "Gambler",
-        "Instructor",
-        "MartialArtist",
-        "PrayersForDestiny",
-        "PrayersForIllumination",
-        "PrayersForWisdom",
-        "PrayersToSpringtime",
-        "ResolutionOfSojourner",
-        "Scholar",
-        "TheExile",
-        "TinyMiracle",
-        "Adventurer",
-        "LuckyDog",
-        "TravelingDoctor"
+        "WanderersTroupe"
     ],
     "stat_keys": {
         "HP": "hp",
@@ -74,11 +57,11 @@
         "Geo DMG Bonus%": "geo_dmg_",
         "Anemo DMG Bonus%": "anemo_dmg_"
     },
-    "slot_keys": {
-        "Flower of Life": "flower",
-        "Plume of Death": "plume",
-        "Sands of Eon": "sands",
-        "Goblet of Eonothem": "goblet",
-        "Circlet of Logos": "circlet"
-    }
+    "slot_keys": [
+        "flower",
+        "plume",
+        "sands",
+        "goblet",
+        "circlet"
+    ]
 }

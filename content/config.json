@@ -1,0 +1,9 @@
+{
+    "bind": "ctrl+p",
+    "good_file_path": "./content/GOOD_file.json",
+    "screenshots_folder": "./content/screenshots",
+    "sounds": {
+        "success": "content/sounds/success.mp3",
+        "error": "content/sounds/error.mp3"
+    }
+}

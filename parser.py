@@ -1,27 +1,58 @@
-from thefuzz import fuzz, process
+import cv2
+import pyautogui
+from thefuzz import process
 import json
 import re
 from time import localtime, strftime
+import pytesseract
+
+with open("content/config.json", "r") as file:
+    SCREENSHOTS_FOLDER = json.load(file)["screenshots_folder"]
 
 
-with open("art_sets_stats.json", "r") as json_file:
-    art_sets_stats = json.load(json_file)
-
-set_keys: list = art_sets_stats["set_keys"]
-stat_keys: dict = art_sets_stats["stat_keys"]
-slot_keys: dict = art_sets_stats["slot_keys"]
-
-
-def get_stat(_line: str) -> str:
-    _stat = process.extract(_line, stat_keys.keys(), limit=2)
-    if _stat[0][1] == _stat[1][1] and "%" in _line:
-        _stat = _stat[1][0]
+def image2text() -> str:
+    screen_width, screen_height = pyautogui.size()
+    if (screen_width, screen_height) == (1920, 1080):
+        x = int(screen_width * 0.75)
+        dx = int(screen_width * 0.25)
     else:
-        _stat = _stat[0][0]
-    return stat_keys[_stat]
+        x = int(screen_width * 0.78)
+        dx = int(screen_width * 0.22)
+    y = int(screen_height * 0.1)
+    dy = int(screen_height * 0.8)
+    region = (x, y, dx, dy)
+
+    formatted_time = strftime("%Y.%m.%d-%H.%M.%S", localtime())
+    path = f"{SCREENSHOTS_FOLDER}/{formatted_time}.png"
+    print(path)
+
+    pyautogui.screenshot(region=region).save(path)
+
+    img = cv2.imread(path)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    _, img = cv2.threshold(img, 150, 240, cv2.THRESH_BINARY)
+
+    text = pytesseract.image_to_string(img, lang="eng")
+
+    return text[: re.search(r"\(\d\)", text).start()]
 
 
 def parse(text: str) -> dict:
+    with open("content/arts_info.json", "r") as json_file:
+        art_sets_stats = json.load(json_file)
+
+    set_keys: list = art_sets_stats["set_keys"]
+    stat_keys: dict = art_sets_stats["stat_keys"]
+    slot_keys: list = art_sets_stats["slot_keys"]
+
+    def get_stat(_line: str) -> str:
+        _stat = process.extract(_line, stat_keys.keys(), limit=2)
+        if _stat[0][1] == _stat[1][1] and "%" in _line:
+            _stat = _stat[1][0]
+        else:
+            _stat = _stat[0][0]
+        return stat_keys[_stat]
+
     # create the template
     json_art = {
         "setKey": "",
@@ -45,6 +76,7 @@ def parse(text: str) -> dict:
         .replace("\n\n", "\n")
         .replace("I0", "10")
         .replace("l0", "10")
+        .replace("3i", "311")
     )
     text = re.sub(r"[ \t]+", " ", text)
     formatted_time = strftime("%Y.%m.%d-%H.%M.%S", localtime())
@@ -55,12 +87,13 @@ def parse(text: str) -> dict:
     text = text.split("\n")
 
     # find slot key and delete array items before it
-    for line in text[1:3]:
-        slot_choice = process.extractOne(line, slot_keys.keys())
-        if slot_choice[1] > 85:
-            text = text[text.index(line) + 1 :]
-            slot_choice = slot_keys[slot_choice[0]]
-            break
+    indexes = []
+    for index, line in enumerate(text[1:3]):
+        for slot in slot_keys:
+            if slot in line.lower():
+                slot_choice = slot
+                indexes.append(index + 1)
+    text = text[indexes[-1] + 1 :]
     json_art["slotKey"] = slot_choice
 
     # check if the set key is 2 lines long and merge these lines
@@ -68,6 +101,7 @@ def parse(text: str) -> dict:
         text[-2] = text[-2] + " " + text[-1]
         text.pop()
 
+    # find set
     set_choice = process.extractOne(text[-1], set_keys)[0]
     text = text[:-1]
     json_art["setKey"] = set_choice
@@ -84,19 +118,18 @@ def parse(text: str) -> dict:
     # find the level
     level_choice = -1
     for line in text[:3]:
-        print(line)
         if re.match(r"\+([0-9]|1[0-9]|20)$", line):
             level_choice = re.sub(r"[^\d]", "", line)
             text = text[text.index(line) + 1 :]
             break
-    json_art["level"] = level_choice
+    json_art["level"] = int(level_choice)
 
-    # there should be only substats
+    # find substats
     substats = []
     for line in text:
         substat = {"key": "", "value": 0}
         substat["key"] = get_stat(line)
-        substat["value"] = float(re.sub(r"[^\d\.]", "", line))
+        substat["value"] = float(re.sub(r"[^\d\.]", "", line).replace("..", "."))
         substats.append(substat)
     json_art["substats"] = substats
 

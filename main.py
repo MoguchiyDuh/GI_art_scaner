@@ -1,58 +1,119 @@
-import pyautogui
-from pynput import keyboard
-from time import localtime, strftime
-import pytesseract
-import cv2
-from parser import parse
-import os
+import tkinter as tk
+from tkinter import font, messagebox, filedialog
 import json
+from logic import *
 
 
-screen_width, screen_height = pyautogui.size()
-x = int(screen_width * 0.78)
-y = int(screen_height * 0.1)
-dx = int(screen_width * 0.22)
-dy = int(screen_height * 0.8)
-region = (x, y, dx, dy)
-folder = "./screenshots"
+with open("content/config.json", "r") as file:
+    config = json.load(file)
 
 
-def image2text() -> str:
-    formatted_time = strftime("%Y.%m.%d-%H.%M.%S", localtime())
-    path = f"{folder}/{formatted_time}.png"
-    print(path)
+def start_gui():
+    root = tk.Tk()
+    root.title("Art Scaner")
+    root.configure(bg="black")
+    bind_key_var = tk.StringVar(value=config["bind"])
 
-    pyautogui.screenshot(region=region).save(path)
+    listener = Listener(bind_key_var.get())
+    custom_font = font.Font(family="Helvetica", size=16, weight="bold")
 
-    img = cv2.imread(path)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    _, img = cv2.threshold(img, 150, 250, cv2.THRESH_BINARY)
+    TRACKING_ENABLED = False
 
-    text = pytesseract.image_to_string(img, lang="eng")
+    def toggle_switch():
+        global TRACKING_ENABLED
+        TRACKING_ENABLED = True if switch_var.get() else False
+        if TRACKING_ENABLED:
+            listener.create_bind(bind_key_var.get())
+        else:
+            print("remove_bind")
+            listener.remove_bind()
+        print(f"SWITCH: {TRACKING_ENABLED}")
 
-    os.remove(path)
-    return text[: text.find("(0)")]
+    def update_bind_gui():
+        global TRACKING_ENABLED
+        update_bind(bind_key_var.get())
+        root.focus_set()
 
+    def clear_cache_gui():
+        clear_cache()
+        messagebox.showinfo("Cache", "Cache cleared!")
 
-def on_release(key):
-    try:
-        if key.char == "p":
-            text = image2text()
-            art = parse(text)
+    def save_file_gui():
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=".json",
+            filetypes=[
+                ("Json files", "*.json"),
+                ("Text files", "*.txt"),
+                ("All files", "*.*"),
+            ],
+        )
 
-            with open("artifacts_GOOD.json", "r") as file:
-                arts_good = json.load(file)
-            arts_good["artifacts"].append(art)
-            with open("artifacts_GOOD.json", "w") as file:
-                json.dump(arts_good, file, indent=4)
-        elif key.char == "o":
-            print("exit")
-            exit()
-    except AttributeError:
-        pass
+        if file_path:
+            if save_file(file_path):
+                messagebox.showinfo("File saved", f"File path: {file_path}")
+            else:
+                messagebox.showerror("Error", "Failed to save the file")
+
+    def exit_app():
+        root.destroy()
+        exit()
+
+    root.protocol("WM_DELETE_WINDOW", exit_app)
+
+    # GUI
+
+    switch_var = tk.BooleanVar(value=False)
+    toggle_button = tk.Checkbutton(
+        root,
+        text="ON/OFF",
+        variable=switch_var,
+        command=toggle_switch,
+        font=custom_font,
+        bg="black",
+        fg="white",
+        selectcolor="gray",
+    )
+    toggle_button.grid(row=0, column=0, padx=10, pady=10, columnspan=2)
+
+    bind_entry = tk.Entry(
+        root, textvariable=bind_key_var, font=custom_font, width=10, justify="center"
+    )
+    bind_entry.grid(row=1, column=0, padx=10, pady=10)
+
+    bind_button = tk.Button(
+        root,
+        text="Change",
+        command=update_bind_gui,
+        font=custom_font,
+        bg="gray",
+        fg="white",
+    )
+    bind_button.grid(row=1, column=1, padx=10, pady=10)
+
+    clear_button = tk.Button(
+        root,
+        text="Clear cache",
+        command=clear_cache_gui,
+        font=custom_font,
+        bg="gray",
+        fg="white",
+        width=15,
+    )
+    clear_button.grid(row=2, column=0, padx=10, pady=10, columnspan=2)
+
+    export_button = tk.Button(
+        root,
+        text="Save file",
+        command=save_file_gui,
+        font=custom_font,
+        bg="gray",
+        fg="white",
+        width=15,
+    )
+    export_button.grid(row=3, column=0, padx=10, pady=10, columnspan=2)
+
+    root.mainloop()
 
 
 if __name__ == "__main__":
-    with keyboard.Listener(on_release=on_release) as listener:
-        print("started")
-        listener.join()
+    start_gui()
