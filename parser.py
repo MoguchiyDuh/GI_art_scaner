@@ -7,7 +7,7 @@ from time import localtime, strftime
 import pytesseract
 
 with open("content/config.json", "r") as file:
-    SCREENSHOTS_FOLDER = json.load(file)["screenshots_folder"]
+    config = json.load(file)
 
 
 def image2text() -> str:
@@ -23,7 +23,8 @@ def image2text() -> str:
     region = (x, y, dx, dy)
 
     formatted_time = strftime("%Y.%m.%d-%H.%M.%S", localtime())
-    path = f"{SCREENSHOTS_FOLDER}/{formatted_time}.png"
+    screenshots_folder = config["screenshots_folder"]
+    path = f"{screenshots_folder}/{formatted_time}.png"
     print(path)
 
     pyautogui.screenshot(region=region).save(path)
@@ -32,7 +33,12 @@ def image2text() -> str:
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     _, img = cv2.threshold(img, 150, 240, cv2.THRESH_BINARY)
 
-    text = pytesseract.image_to_string(img, lang="eng")
+    try:
+        text = pytesseract.image_to_string(img, lang=config["lang"])
+
+    except pytesseract.TesseractError:
+        text = pytesseract.image_to_string(img, lang="eng")
+        print("special language is not found, using eng.traineddata")
 
     return text[: re.search(r"\(\d\)", text).start()]
 
