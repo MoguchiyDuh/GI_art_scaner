@@ -1,5 +1,222 @@
 {
     "format": "GOOD",
     "version": 1,
-    "artifacts": []
+    "artifacts": [
+        {
+            "setKey": "GildedDreams",
+            "slotKey": "flower",
+            "level": 20,
+            "rarity": 5,
+            "mainStatKey": "hp",
+            "location": "",
+            "lock": false,
+            "substats": [
+                {
+                    "key": "critRate_",
+                    "value": 13.6
+                },
+                {
+                    "key": "critDMG_",
+                    "value": 13.2
+                },
+                {
+                    "key": "def",
+                    "value": 23.0
+                },
+                {
+                    "key": "def_",
+                    "value": 5.8
+                }
+            ]
+        },
+        {
+            "setKey": "EmblemOfSeveredFate",
+            "slotKey": "goblet",
+            "level": 20,
+            "rarity": 5,
+            "mainStatKey": "dendro_dmg_",
+            "location": "",
+            "lock": false,
+            "substats": [
+                {
+                    "key": "eleMas",
+                    "value": 54.0
+                },
+                {
+                    "key": "critRate_",
+                    "value": 10.5
+                },
+                {
+                    "key": "atk_",
+                    "value": 9.9
+                },
+                {
+                    "key": "hp",
+                    "value": 269.0
+                }
+            ]
+        },
+        {
+            "setKey": "GildedDreams",
+            "slotKey": "circlet",
+            "level": 20,
+            "rarity": 5,
+            "mainStatKey": "critRate_",
+            "location": "",
+            "lock": false,
+            "substats": [
+                {
+                    "key": "hp",
+                    "value": 837.0
+                },
+                {
+                    "key": "enerRech_",
+                    "value": 17.5
+                },
+                {
+                    "key": "atk",
+                    "value": 14.0
+                },
+                {
+                    "key": "critDMG_",
+                    "value": 13.2
+                }
+            ]
+        },
+        {
+            "setKey": "GildedDreams",
+            "slotKey": "circlet",
+            "level": 20,
+            "rarity": 5,
+            "mainStatKey": "critDMG_",
+            "location": "",
+            "lock": false,
+            "substats": [
+                {
+                    "key": "atk_",
+                    "value": 14.6
+                },
+                {
+                    "key": "critRate_",
+                    "value": 10.5
+                },
+                {
+                    "key": "def",
+                    "value": 23.0
+                },
+                {
+                    "key": "hp",
+                    "value": 269.0
+                }
+            ]
+        },
+        {
+            "setKey": "WanderersTroupe",
+            "slotKey": "circlet",
+            "level": 20,
+            "rarity": 5,
+            "mainStatKey": "critRate_",
+            "location": "",
+            "lock": false,
+            "substats": [
+                {
+                    "key": "enerRech_",
+                    "value": 9.1
+                },
+                {
+                    "key": "atk_",
+                    "value": 9.9
+                },
+                {
+                    "key": "eleMas",
+                    "value": 56.0
+                },
+                {
+                    "key": "hp_",
+                    "value": 9.3
+                }
+            ]
+        },
+        {
+            "setKey": "WanderersTroupe",
+            "slotKey": "circlet",
+            "level": 20,
+            "rarity": 5,
+            "mainStatKey": "critRate_",
+            "location": "",
+            "lock": false,
+            "substats": [
+                {
+                    "key": "hp_",
+                    "value": 4.1
+                },
+                {
+                    "key": "eleMas",
+                    "value": 86.0
+                },
+                {
+                    "key": "atk",
+                    "value": 37.0
+                },
+                {
+                    "key": "critDMG_",
+                    "value": 6.2
+                }
+            ]
+        },
+        {
+            "setKey": "WanderersTroupe",
+            "slotKey": "circlet",
+            "level": 20,
+            "rarity": 5,
+            "mainStatKey": "critDMG_",
+            "location": "",
+            "lock": false,
+            "substats": [
+                {
+                    "key": "critRate_",
+                    "value": 6.6
+                },
+                {
+                    "key": "enerRech_",
+                    "value": 9.7
+                },
+                {
+                    "key": "atk",
+                    "value": 16.0
+                },
+                {
+                    "key": "eleMas",
+                    "value": 75.0
+                }
+            ]
+        },
+        {
+            "setKey": "NoblesseOblige",
+            "slotKey": "goblet",
+            "level": 20,
+            "rarity": 5,
+            "mainStatKey": "cryo_dmg_",
+            "location": "",
+            "lock": false,
+            "substats": [
+                {
+                    "key": "critRate_",
+                    "value": 3.5
+                },
+                {
+                    "key": "enerRech_",
+                    "value": 5.2
+                },
+                {
+                    "key": "def_",
+                    "value": 17.5
+                },
+                {
+                    "key": "critDMG_",
+                    "value": 28.8
+                }
+            ]
+        }
+    ]
 }

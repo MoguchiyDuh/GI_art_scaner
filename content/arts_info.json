@@ -53,9 +53,10 @@
     "Cryo DMG Bonus%": "cryo_dmg_",
     "Hydro DMG Bonus%": "hydro_dmg_",
     "Electro DMG Bonus%": "electro_dmg_",
-    "DendroDMG Bonus%": "dendro_dmg_",
+    "Dendro DMG Bonus%": "dendro_dmg_",
     "Geo DMG Bonus%": "geo_dmg_",
-    "Anemo DMG Bonus%": "anemo_dmg_"
+    "Anemo DMG Bonus%": "anemo_dmg_",
+    "Physical DMG Bonus%": "physical_dmg_"
   },
   "slot_keys": ["flower", "plume", "sands", "goblet", "circlet"]
 }

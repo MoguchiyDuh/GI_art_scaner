@@ -40,7 +40,7 @@ def image2text() -> str:
         text = pytesseract.image_to_string(img, lang="eng")
         print("special language is not found, using eng.traineddata")
 
-    return text[: re.search(r"\(\d\)", text).start()]
+    return text[: re.search(r"[({]\d[)}]", text).start()]
 
 
 def parse(text: str) -> dict:
@@ -82,7 +82,6 @@ def parse(text: str) -> dict:
         .replace("\n\n", "\n")
         .replace("I0", "10")
         .replace("l0", "10")
-        .replace("3i", "311")
     )
     text = re.sub(r"[ \t]+", " ", text)
     formatted_time = strftime("%Y.%m.%d-%H.%M.%S", localtime())
